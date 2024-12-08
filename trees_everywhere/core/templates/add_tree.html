@@ -1,8 +1,28 @@
-{% extends 'base.html' %} {% block content %}
-<h2>Plant a New Tree</h2>
-<form method="POST" enctype="multipart/form-data">
-  {% csrf_token %} {{ form.as_p }} {{ form.errors }}
-  <button type="submit">Plant Tree</button>
-</form>
-<a href="{% url 'user_trees' %}">Back to Your Trees</a>
-{% endblock %}
+<!-- add_tree.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Plantar Nova Árvore</title>
+  </head>
+  <body>
+    <h1>Plantar Nova Árvore</h1>
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Plantar</button>
+    </form>
+    {% if form.errors %}
+    <div>
+      <h2>Erros no formulário:</h2>
+      <ul>
+        {% for field in form %} {% if field.errors %}
+        <li>{{ field.label }}: {{ field.errors }}</li>
+        {% endif %} {% endfor %} {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    <br />
+    <a href="{% url 'user_trees' %}">Visualizar Árvores</a>
+  </body>
+</html>

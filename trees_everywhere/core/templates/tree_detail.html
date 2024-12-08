@@ -1,7 +1,13 @@
+<!-- tree_detail.html -->
 {% extends 'base.html' %} {% block content %}
-<h2>Tree Details</h2>
-<p><strong>Plant:</strong> {{ tree.plant.name }}</p>
-<p><strong>Location:</strong> ({{ tree.latitude }}, {{ tree.longitude }})</p>
-<p><strong>Date Planted:</strong> {{ tree.date_planted }}</p>
-<a href="{% url 'user_trees' %}">Back to Your Trees</a>
+<h2>Detalhes da Árvore</h2>
+<p><strong>Árvore:</strong> {{ planted_tree.tree.name }}</p>
+<p><strong>Nome Científico:</strong> {{ planted_tree.tree.scientific_name }}</p>
+<p><strong>Idade:</strong> {{ planted_tree.age }} anos</p>
+<p><strong>Plantada em:</strong> {{ planted_tree.planted_at }}</p>
+<p>
+  <strong>Localização:</strong> ({{ planted_tree.location_lat }}, {{
+  planted_tree.location_long }})
+</p>
+<a href="{% url 'user_trees' %}">Voltar</a>
 {% endblock %}

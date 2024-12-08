@@ -8,7 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import PlantedTree
-from .forms import PlantTreeForm  
+from .forms import PlantTreeForm
 
 
 
@@ -28,7 +28,7 @@ def login_view(request):
                 # Se o usuário for autenticado, faz o login
                 login(request, user)
                 messages.success(request, "Login realizado com sucesso!")
-                return redirect('user_trees')  # Redireciona para a página inicial após login
+                return redirect('add_tree')  # Redireciona para a página inicial após login
             else:
                 # Caso as credenciais sejam inválidas
                 messages.error(request, "Credenciais inválidas.")
@@ -52,13 +52,11 @@ def user_trees_view(request):
 from django.shortcuts import get_object_or_404
 
 
+
 @login_required
-def tree_detail_view(request, tree_id):
-    """
-    View to display details of a specific planted tree.
-    """
-    tree = get_object_or_404(PlantedTree, id=tree_id, user=request.user)
-    return render(request, 'tree_detail.html', {'tree': tree})
+def tree_detail_view(request, pk): 
+    planted_tree = get_object_or_404(PlantedTree, pk=pk) 
+    return render(request, 'tree_detail.html', {'planted_tree': planted_tree})
 
 
 
@@ -66,15 +64,22 @@ def tree_detail_view(request, tree_id):
 @login_required
 def add_tree_view(request):
     if request.method == 'POST':
+        print("Formulário submetido.")
         form = PlantTreeForm(request.POST)
         if form.is_valid():
+            print("Formulário válido.")
             planted_tree = form.save(commit=False)
             planted_tree.user = request.user
             planted_tree.save()
+            print("Árvore plantada e salva.")
             return redirect('user_trees')
+        else:
+            print("Formulário inválido:", form.errors)
     else:
         form = PlantTreeForm()
     return render(request, 'add_tree.html', {'form': form})
+
+
 
 
 
@@ -87,25 +92,44 @@ def account_trees_view(request):
     planted_trees = PlantedTree.objects.filter(user__accounts__in=accounts).distinct()
     return render(request, 'account_trees.html', {'planted_trees': planted_trees})
 
+
+
 @api_view(['GET'])
 def user_trees_api(request):
     """
-    API endpoint to return all trees planted by the logged-in user.
+    API endpoint para retornar todas as árvores plantadas pelo usuário logado.
     """
     if not request.user.is_authenticated:
-        return Response({'error': 'Authentication required'}, status=401)
+        return Response({'error': 'Autenticação necessária'}, status=401)
 
     # Recupera as árvores plantadas pelo usuário
     planted_trees = PlantedTree.objects.filter(user=request.user)
     data = [
         {
             'id': tree.id,
-            'plant_name': tree.plant.name,
-            'latitude': float(tree.latitude),
-            'longitude': float(tree.longitude),
-            'date_planted': tree.date_planted.strftime('%Y-%m-%d %H:%M:%S'),
+            'tree': tree.tree,
+            'age': tree.age,
+            'planted_at': tree.planted_at.strftime('%Y-%m-%d %H:%M:%S'),
         }
         for tree in planted_trees
     ]
 
     return Response(data, status=200)
+
+
+def create_tree(request, form):
+    plant_name = form.cleaned_data['tree']
+    plant, created = Plant.objects.get_or_create(name=plant_name)
+    PlantedTree.objects.create(user=request.user, plant=plant, **form.cleaned_data)
+    return redirect('user_trees')
+
+
+def plant_create_view(request):
+    if request.method == 'POST':
+        form = PlantForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('plant_list')
+    else:
+        form = PlantForm()
+    return render(request, 'plant_form.html', {'form': form})
