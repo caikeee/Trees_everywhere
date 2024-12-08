@@ -1,0 +1,7 @@
+{% extends 'base.html' %} {% block content %}
+<h2>Tree Details</h2>
+<p><strong>Plant:</strong> {{ tree.plant.name }}</p>
+<p><strong>Location:</strong> ({{ tree.latitude }}, {{ tree.longitude }})</p>
+<p><strong>Date Planted:</strong> {{ tree.date_planted }}</p>
+<a href="{% url 'user_trees' %}">Back to Your Trees</a>
+{% endblock %}

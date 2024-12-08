@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2>Plant a New Tree</h2>
+<form method="POST" action="{% url 'add_tree' %}">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit">Plant Tree</button>
+</form>
+
+<h2>Your Trees:</h2>
+<ul>
+  {% for tree in planted_trees %}
+  <li>
+    {{ tree.plant.name }} at {{ tree.get_location }} on {{ tree.date_planted }}
+    <a href="{% url 'tree_detail' tree.id %}">Details</a>
+  </li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'user_trees' %}">Ver todas as árvores</a>
+{% endblock %}

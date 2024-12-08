@@ -1,0 +1,8 @@
+{% extends 'base.html' %} {% block content %}
+<h2>Plant a New Tree</h2>
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %} {{ form.as_p }} {{ form.errors }}
+  <button type="submit">Plant Tree</button>
+</form>
+<a href="{% url 'user_trees' %}">Back to Your Trees</a>
+{% endblock %}
