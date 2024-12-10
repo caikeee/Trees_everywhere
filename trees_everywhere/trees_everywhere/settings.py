@@ -129,3 +129,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Specifies the custom User model to be used for authentication.
 AUTH_USER_MODEL = 'core.User'
+
+
+CSRF_COOKIE_SECURE = False  # Certifique-se de que esta opção está como False para desenvolvimento local
+CSRF_COOKIE_HTTPONLY = False

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Contas</title>
+    <!-- Carregar a tag static -->
+    {% load static %}
+    <!-- Link para o CSS customizado -->
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <!-- Cabeçalho ou barra de navegação, se houver -->
+    </header>
+
+    <main>
+      <div class="card">
+        <h2 class="card-title">Lista de Contas</h2>
+        <ul>
+          {% for account in accounts %}
+          <li>
+            <strong>{{ account.name }}</strong> -
+            <h4>Usuários desta conta:</h4>
+            <ul>
+              {% for user in account.users.all %}
+              <li>{{ user.username }} ({{ user.email }})</li>
+              {% empty %}
+              <li>Nenhum usuário associado a esta conta.</li>
+              {% endfor %}
+            </ul>
+          </li>
+          {% endfor %}
+        </ul>
+
+        <h2 class="card-title">Criar/Editar Conta</h2>
+        <!-- Formulário para criar/editar conta -->
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label for="id_name">Nome da Conta</label>
+            <!-- Renderiza o campo 'name' do formulário -->
+            {{ form.name }}
+            <!-- Se a variável 'form.name' não renderizar o input, tente usar a tag 'form.as_p' -->
+          </div>
+
+          <div class="mb-3">
+            <label for="id_active">Status da Conta</label>
+            {{ form.active }}
+          </div>
+
+          <button type="submit" class="btn btn-primary">Salvar Conta</button>
+        </form>
+      </div>
+    </main>
+
+    <footer>
+      <!-- Rodapé, se houver -->
+    </footer>
+  </body>
+</html>

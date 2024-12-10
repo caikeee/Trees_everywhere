@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% if form.instance.pk %}Editar Conta{% else %}Criar Conta{% endif %}
+    </title>
+  </head>
+  <body>
+    <header>
+      <!-- Cabeçalho ou barra de navegação, se houver -->
+    </header>
+
+    <main>
+      <h2>
+        {% if form.instance.pk %}Editar Conta{% else %}Criar Conta{% endif %}
+      </h2>
+      <form method="post">
+        {% csrf_token %} {{ form.as_p }}
+        <button type="submit">
+          {% if form.instance.pk %}Salvar Alterações{% else %}Criar{% endif %}
+        </button>
+      </form>
+      <a href="{% url 'account_list' %}">Voltar para a lista de contas</a>
+
+      {% if members %}
+      <h3>Membros da Conta:</h3>
+      <ul>
+        {% for member in members %}
+        <li>{{ member.username }} - {{ member.email }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>Não há membros associados a esta conta.</p>
+      {% endif %}
+    </main>
+
+    <footer>
+      <!-- Rodapé, se houver -->
+    </footer>
+  </body>
+</html>

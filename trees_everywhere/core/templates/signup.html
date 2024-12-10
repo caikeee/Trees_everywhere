@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Carregar a tag static -->
-    {% load static %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
-    <!-- Link para o CSS customizado -->
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <title>Registrar</title>
   </head>
   <body>
     <header>
       <!-- Cabeçalho ou barra de navegação, se houver -->
     </header>
-    <!-- Carregar o CSS -->
 
     <main>
-      {% block content %} {% endblock %}
-      <!-- Carregar o CSS -->
+      <h2>Registrar</h2>
+      <form method="post">
+        {% csrf_token %} {{ form.as_p }}
+        <button type="submit">Registrar</button>
+      </form>
+      <a href="{% url 'login' %}">Já tem uma conta? Faça login aqui.</a>
     </main>
 
     <footer>
