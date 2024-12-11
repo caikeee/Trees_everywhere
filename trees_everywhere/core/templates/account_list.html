@@ -20,8 +20,14 @@
         <ul>
           {% for account in accounts %}
           <li>
-            <strong>{{ account.name }}</strong> -
-            <h4>Usuários desta conta:</h4>
+            <strong>{{ account.name }}</strong>
+
+            <a
+              href="{% url 'account_tree' account.name %}"
+              class="text-decoration-none"
+              >Ver Detalhes</a
+            >
+
             <ul>
               {% for user in account.users.all %}
               <li>{{ user.username }} ({{ user.email }})</li>

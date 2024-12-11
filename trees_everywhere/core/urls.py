@@ -6,7 +6,7 @@ from .views import (
     tree_detail_view, 
     user_trees_view, 
     add_tree_view, 
-    account_trees_view, 
+    account_tree_view, 
     user_trees_api
 )
 
@@ -24,8 +24,15 @@ urlpatterns = [
     # URL for adding a new tree
     path('tree/add/', add_tree_view, name='add_tree'),
 
+   
     # URL for viewing trees planted in accounts the user is part of
-    path('account/trees/', account_trees_view, name='account_trees'),
+    path('account/tree/<str:name>/', account_tree_view, name='account_tree'),
+    
+
+
+
+
+    
 
     # URL for viewing trees planted in accounts the user is part of
     path('account/list/', account_list_view, name='account_list'),

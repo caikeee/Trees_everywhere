@@ -84,13 +84,16 @@ def add_tree_view(request):
 
 # Protected function to display trees planted in accounts the user is part of
 @login_required
-def account_trees_view(request):
-    # Retrieve all accounts the user is part of
-    accounts = request.user.accounts.all()
-    # Retrieve trees planted in those accounts
-    planted_trees = PlantedTree.objects.filter(user__accounts__in=accounts).distinct()
-    # Render the page with the planted trees in accounts
-    return render(request, 'account_trees.html', {'planted_trees': planted_trees})
+def account_tree_view(request, name):
+    # Retrieve the account by its name
+    account = get_object_or_404(Account, name=name)  # Busca a conta pelo campo 'name'
+    
+    # Retrieve trees planted by users in this account
+    planted_trees = PlantedTree.objects.filter(user__accounts=account).distinct()
+    
+    # Render the page with the account and planted trees
+    return render(request, 'account_tree.html', {'account': account, 'planted_trees': planted_trees})
+
 
 # API to return trees planted by the logged-in user
 @api_view(['GET'])
